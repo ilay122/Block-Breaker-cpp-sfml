@@ -5,19 +5,19 @@
 #include <iostream>
 class Game{
 public:
-	
+
 	void drawBricks(std::vector<sf::RectangleShape>& bricks, sf::RenderWindow& window){
 		for (int i = 0; i < bricks.size(); i++){
 			window.draw(bricks[i]);
 		}
 	}
-	void reset(std::vector<sf::RectangleShape>& bricks,sf::RectangleShape rect){
+	void reset(std::vector<sf::RectangleShape>& bricks, sf::RectangleShape rect){
 		bricks.clear();
-		for (int i = 0; i < 9; i++){
-			for (int j = 0; j < 10; j++){
+		for (int i = 0; i < 5; i++){
+			for (int j = 0; j < 14; j++){
 				sf::Color color(rand(), rand(), rand());
 				rect.setFillColor(color);
-				rect.setPosition((i + 1) * (rect.getGlobalBounds().width + 2) + 10, (j + 2) * (rect.getGlobalBounds().height + 3));
+				rect.setPosition(j * (rect.getGlobalBounds().width + 4) + 25, i*(rect.getGlobalBounds().height + 3));
 				bricks.push_back(rect);
 			}
 		}
@@ -25,7 +25,7 @@ public:
 	int run()
 	{
 
-		sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
+		sf::RenderWindow window(sf::VideoMode(800, 600), "Block Breaker");
 		window.setFramerateLimit(60);
 
 		int state = 0;//0 -> playing \ 1->lost \2->won \ 3-> pause
@@ -38,16 +38,9 @@ public:
 
 		std::vector<sf::RectangleShape> bricks;
 		sf::RectangleShape rect;
-		rect.setSize(sf::Vector2f(70, 20));
+		rect.setSize(sf::Vector2f(50, 20));
 
-		for (int i = 0; i < 9; i++){
-			for (int j = 0; j < 10; j++){
-				sf::Color color(rand(), rand(), rand());
-				rect.setFillColor(color);
-				rect.setPosition((i + 1) * (rect.getGlobalBounds().width + 2) + 10, (j + 2) * (rect.getGlobalBounds().height + 3));
-				bricks.push_back(rect);
-			}
-		}
+		reset(bricks, rect);
 		while (window.isOpen())
 		{
 			sf::Event event;
@@ -58,7 +51,7 @@ public:
 			}
 
 			bool currentppressed = sf::Keyboard::isKeyPressed(sf::Keyboard::P);
-			if (currentppressed && !ppresed && state !=1 && state !=2){
+			if (currentppressed && !ppresed && state != 1 && state != 2){
 				if (state == 0)
 					state = 3;
 				else
@@ -77,7 +70,7 @@ public:
 				state = 2;
 
 			bool spaceclicked = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
-			if (state != 0 && state !=3){
+			if (state != 0 && state != 3){
 				if (spaceclicked && !spacepressed){
 					reset(bricks, rect);
 					ball->reset();
@@ -96,5 +89,5 @@ public:
 
 		return 0;
 	}
-	
+
 };
